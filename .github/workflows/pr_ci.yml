@@ -9,8 +9,10 @@ jobs:
 
     steps:
 # Checkout source code
-    - uses: actions/checkout@v2
-
+#    - uses: actions/checkout@v2
+    - name: Checkout 
+      run: gh pr checkout ${{ github.event.pull_request.number }}
+  
 # Cache maven stuff
     - name: Cache local Maven repository
       uses: actions/cache@v2
