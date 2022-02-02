@@ -34,7 +34,7 @@ Spring boot actuator is listening for connections on port 8081. This is used as 
 
 Prometheus scrape endpoint: `http://localhost:8081/actuator/prometheus`  
 Health URL that can be used for readiness probe: `http://localhost:8081/actuator/health`
-
+ff
 ## Configuration
 
 | Environment variable | Description | Required |
