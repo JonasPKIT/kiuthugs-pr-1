@@ -38,23 +38,20 @@ jobs:
       run: |
         echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
 
-    - name: Update coverage badge
-      run: ./build/badge-update.sh
-
     - name: Upload Jacoco coverage report
       uses: actions/upload-artifact@v2
       with:
         name: jacoco-report
         path: testreport/target/site/jacoco-aggregate/
 
-    - name: Create comment
-      uses: peter-evans/create-or-update-comment@v1
+    - name: Save PR number
+      run: |
+        mkdir -p ./pr
+        echo ${{ github.event.number }} > ./pr/NR
+
+    - uses: actions/upload-artifact@v2
       with:
-        issue-number: ${{ github.event.number }}
-        body: |
-          This is a multi-line test comment
-          - With GitHub **Markdown** :sparkles:
-          - Created by [create-or-update-comment][1]
-          
-          [1]: https://github.com/peter-evans/create-or-update-comment
-        reactions: '+1'
+        name: pr
+        path: |
+          pr/
+          .github/badges/jacoco.svg
