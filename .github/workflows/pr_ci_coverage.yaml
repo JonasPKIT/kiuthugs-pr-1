@@ -1,6 +1,6 @@
- name: Update coverage
+name: Update coverage
  
- on:
+on:
    workflow_run:
      workflows: ["Pull Request CI"]
      types:
