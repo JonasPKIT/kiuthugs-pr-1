@@ -59,15 +59,27 @@ jobs:
       run: |
         echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
 
-    - name: Update coverage badge
-      if: ${{ steps.tag.conclusion == 'skipped' }}
-      run: ./build/badge-update.sh
+#    - name: Update coverage badge
+#      if: ${{ steps.tag.conclusion == 'skipped' }}
+#      run: ./build/badge-update.sh
 
     - name: Upload Jacoco coverage report
       uses: actions/upload-artifact@v2
       with:
         name: jacoco-report
         path: testreport/target/site/jacoco-aggregate/
+
+    - name: Create comment
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+#        issue-number: 1
+        body: |
+          This is a multi-line test comment
+          - With GitHub **Markdown** :sparkles:
+          - Created by [create-or-update-comment][1]
+          
+          [1]: https://github.com/peter-evans/create-or-update-comment
+        reactions: '+1'
 
     - name: Tag service dev docker image
       run: ./build/docker-tag.sh ${{ env.DOCKER_SERVICE }}:latest ${{ env.DOCKER_SERVICE }}:dev
