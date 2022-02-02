@@ -1,10 +1,10 @@
 name: Update coverage
  
 on:
-   workflow_run:
-     workflows: ["Pull Request CI"]
-     types:
-       - completed
+  workflow_run:
+    workflows: ["Pull Request CI"]
+    types:
+      - completed
 
 jobs:
   upload:
