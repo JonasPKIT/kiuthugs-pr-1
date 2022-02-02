@@ -49,18 +49,6 @@ jobs:
     - name: Build and test
       run: ./build/build.sh
 
-    - name: Create comment
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        issue-number: ${{ github.event.number }}
-        body: |
-          This is a multi-line test comment
-          - With GitHub **Markdown** :sparkles:
-          - Created by [create-or-update-comment][1]
-          
-          [1]: https://github.com/peter-evans/create-or-update-comment
-        reactions: '+1'
-
     - name: Tag service dev docker image
       run: ./build/docker-tag.sh ${{ env.DOCKER_SERVICE }}:latest ${{ env.DOCKER_SERVICE }}:dev
 
