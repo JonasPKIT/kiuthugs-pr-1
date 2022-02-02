@@ -1,0 +1,46 @@
+name: Update coverage
+ 
+on:
+  workflow_run:
+    workflows: ["Pull Request CI"]
+    types:
+      - completed
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    if: >
+      ${{ github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' }}    
+    steps: 
+      - name: 'Download artifact'
+        uses: actions/download-artifact@v2
+        with:
+          name: pr
+          
+      - name: Generate Jacoco Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v1.0.0
+        with:
+          jacoco-csv-file: testreport/target/site/jacoco-aggregate/jacoco.csv
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"  
+
+      - name: Update coverage badge
+        run: ./build/badge-update.sh
+
+      - name: 'Comment on PR with code coverage'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var fs = require('fs');
+            var issue_number = Number(fs.readFileSync('./NR'));
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: 'PR updated with code coverage badge.'
+            });
